@@ -30,15 +30,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${groups}" var="group">
+                <c:forEach items="${groups}" var="groups">
                     <tr>
-                        <td><c:out value="${group.getId()}"/></td>
-                        <td><c:out value="${group.getName()}"/></td>
-                        <td><c:out value="${group.getCreatedAt()}"/></td>
-                        <td><c:out value="${group.getStudentCount()}"/></td>
+                        <td><c:out value="${groups.getId()}"/></td>
+                        <td><c:out value="${groups.getName()}"/></td>
+                        <td><c:out value="${groups.getCreatedAt()}"/></td>
+                        <td><c:out value="${groups.getStudentCount()}"/></td>
                         <td>
-                            <a href="/group/update/${group.getId()}" class="btn btn-warning">Update</a> ||
-                            <a href="/group/delete/${group.getId()}" class="btn btn-danger">Delete</a>
+                            <a href="/group/update/${groups.getId()}" class="btn btn-warning">Update</a> ||
+                            <a href="/group/delete/${groups.getId()}" class="btn btn-danger">Delete</a>
                         </td>
                     </tr>
                 </c:forEach>

@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
-    <title>Group Update</title>
+    <title>Student Update</title>
     <jsp:include page="/fragments/css.jsp"/>
 </head>
 <body>

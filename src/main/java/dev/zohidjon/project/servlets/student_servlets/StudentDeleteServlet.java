@@ -1,49 +1,42 @@
 package dev.zohidjon.project.servlets.student_servlets;
 
-import dev.zohidjon.project.models.Group;
 import dev.zohidjon.project.models.Student;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.postgresql.Driver;
 
 import java.io.IOException;
-import java.sql.*;
 
 @WebServlet(name = "StudentDeleteServlet", urlPatterns = "/student/delete/*")
 public class StudentDeleteServlet extends HttpServlet {
+    private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("orm_project");
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
         String id = pathInfo.substring(1);
-
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            DriverManager.registerDriver(new Driver());
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/jakarta?currentSchema=jdbc",
-                    "postgres",
-                    "2004");
-            PreparedStatement statement = connection.prepareStatement("select * from student s where s.id = ?;");
-            statement.setString(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                Student student = Student.builder()
-                        .id(resultSet.getString("id"))
-                        .fullName(resultSet.getString("fullName"))
-                        .createdAt(resultSet.getTimestamp("createdAt").toLocalDateTime())
-                        .groupID(resultSet.getString("groupID"))
-                        .age(resultSet.getInt("age"))
-                        .build();
-
+            entityManager.getTransaction().begin();
+            Student student = entityManager.find(Student.class, id);
+            if (student != null) {
                 request.setAttribute("student", student);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/views/student/delete.jsp");
                 dispatcher.forward(request, response);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw new ServletException();
+        } finally {
+            entityManager.close();
         }
     }
 
@@ -52,18 +45,22 @@ public class StudentDeleteServlet extends HttpServlet {
         String pathInfo = request.getPathInfo();
         String id = pathInfo.substring(1);
 
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            DriverManager.registerDriver(new Driver());
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/jakarta?currentSchema=jdbc",
-                    "postgres",
-                    "2004");
-            PreparedStatement statement = connection.prepareStatement("delete from student s where s.id = ?");
-            statement.setString(1, id);
-            statement.execute();
+            entityManager.getTransaction().begin();
+            Student student = entityManager.find(Student.class, id);
+            if (student != null) {
+                entityManager.remove(student);
+            }
+            entityManager.getTransaction().commit();
             response.sendRedirect("/student");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw new ServletException();
+        } finally {
+            entityManager.close();
         }
     }
 }

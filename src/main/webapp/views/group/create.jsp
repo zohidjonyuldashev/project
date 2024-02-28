@@ -9,10 +9,6 @@
 <div class="container mt-5">
     <form method="post">
         <div class="mb-3">
-            <label for="id" class="form-label">Id</label>
-            <input type="number" class="form-control" id="id" name="id">
-        </div>
-        <div class="mb-3">
             <label for="name" class="form-label">Name</label>
             <input type="text" class="form-control" id="name" name="name">
         </div>

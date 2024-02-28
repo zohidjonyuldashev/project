@@ -1,15 +1,17 @@
 package dev.zohidjon.project.servlets.student_servlets;
 
+import dev.zohidjon.project.models.Student;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.postgresql.Driver;
 
 import java.io.IOException;
-import java.sql.*;
 
 @WebServlet(name = "StudentAddServlet", value = "/student/add")
 public class StudentAddServlet extends HttpServlet {
@@ -21,35 +23,29 @@ public class StudentAddServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String id = request.getParameter("id");
         String fullName = request.getParameter("fullName");
-        String groupID = request.getParameter("groupID");
+        int groupID = Integer.parseInt(request.getParameter("groupID"));
         int age = Integer.parseInt(request.getParameter("age"));
+        Student student = Student.builder()
+                .fullName(fullName)
+                .groupID(groupID)
+                .age(age)
+                .build();
 
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("orm_project");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            DriverManager.registerDriver(new Driver());
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/jakarta?currentSchema=jdbc",
-                    "postgres",
-                    "2004");
-
-            PreparedStatement checkGroupStatement = connection.prepareStatement("SELECT id FROM groups WHERE id = ?");
-            checkGroupStatement.setString(1, groupID);
-            ResultSet groupResultSet = checkGroupStatement.executeQuery();
-
-            if (!groupResultSet.next()) {
-                throw new IllegalArgumentException("Invalid groupID: " + groupID);
-            }
-
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO student(id, fullName, groupID, age) VALUES (?, ?, ?, ?);");
-            statement.setString(1, id);
-            statement.setString(2, fullName);
-            statement.setString(3, groupID);
-            statement.setInt(4, age);
-            statement.execute();
+            entityManager.getTransaction().begin();
+            entityManager.persist(student);
+            entityManager.getTransaction().commit();
             response.sendRedirect("/student");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw new ServletException(e);
+        } finally {
+            entityManager.close();
         }
     }
 }

@@ -2,16 +2,12 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
-    <title>Group Create</title>
+    <title>Student Create</title>
     <jsp:include page="/fragments/css.jsp"/>
 </head>
 <body>
 <div class="container mt-5">
     <form method="post">
-        <div class="mb-3">
-            <label for="id" class="form-label">Id</label>
-            <input type="number" class="form-control" id="id" name="id">
-        </div>
         <div class="mb-3">
             <label for="fullName" class="form-label">Full Name</label>
             <input type="text" class="form-control" id="fullName" name="fullName">

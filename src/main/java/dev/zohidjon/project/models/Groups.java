@@ -14,14 +14,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Student {
+public class Groups {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String fullName;
+    private String name;
     @CreationTimestamp
     @Column(insertable = true, updatable = false, columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime createdAt;
-    private Integer groupID;
-    private int age;
+    private int studentCount;
 }

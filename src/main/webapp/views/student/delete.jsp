@@ -10,7 +10,7 @@
     <form method="post">
         <div class="alert alert-danger">
             <h1>Are you sure you want to delete the "<i><c:out value="${student.getFullName()}"/></i>" student in the
-                "<i><c:out value="${student.getGroupID()}"/></i>" group ?</h1>
+                "<i><c:out value="${student.getGroupID()}"/></i>" groups ?</h1>
         </div>
         <a href="/" class="btn btn-warning">Back</a>
         <button type="submit" class="btn btn-danger">Yes</button>
