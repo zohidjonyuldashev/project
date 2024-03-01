@@ -5,7 +5,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,12 +20,14 @@ public class StudentHomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("orm_project");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        List<Student> students;
         try {
             entityManager.getTransaction().begin();
-            TypedQuery<Student> query = entityManager.createQuery("select s from Student s", Student.class);
-            students = query.getResultList();
+            TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s order by s.id", Student.class);
+            List<Student> students = query.getResultList();
             entityManager.getTransaction().commit();
+
+            request.setAttribute("students", students);
+            request.getRequestDispatcher("/views/student/home.jsp").forward(request, response);
         } catch (Exception e) {
             if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
@@ -35,9 +36,6 @@ public class StudentHomeServlet extends HttpServlet {
         } finally {
             entityManager.close();
         }
-        request.setAttribute("students", students);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/views/student/home.jsp");
-        dispatcher.forward(request, response);
     }
 
     @Override

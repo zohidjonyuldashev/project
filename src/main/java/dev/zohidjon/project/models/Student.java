@@ -22,6 +22,9 @@ public class Student {
     @CreationTimestamp
     @Column(insertable = true, updatable = false, columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime createdAt;
-    private Integer groupID;
     private int age;
+
+    @ManyToOne
+    @JoinColumn(name = "groupId")
+    private Groups group;
 }

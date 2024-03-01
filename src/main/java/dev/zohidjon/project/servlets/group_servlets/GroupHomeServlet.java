@@ -5,7 +5,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,12 +20,14 @@ public class GroupHomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("orm_project");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        List<Groups> groups;
         try {
             entityManager.getTransaction().begin();
-            TypedQuery<Groups> query = entityManager.createQuery("select g from Groups g", Groups.class);
-            groups = query.getResultList();
+            TypedQuery<Groups> query = entityManager.createQuery("SELECT g FROM Groups g order by g.id", Groups.class);
+            List<Groups> groups = query.getResultList();
             entityManager.getTransaction().commit();
+
+            request.setAttribute("groups", groups);
+            request.getRequestDispatcher("/views/group/home.jsp").forward(request, response);
         } catch (Exception e) {
             if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
@@ -35,9 +36,6 @@ public class GroupHomeServlet extends HttpServlet {
         } finally {
             entityManager.close();
         }
-        request.setAttribute("groups", groups);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/views/group/home.jsp");
-        dispatcher.forward(request, response);
     }
 
     @Override

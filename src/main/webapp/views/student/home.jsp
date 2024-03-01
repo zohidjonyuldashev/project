@@ -37,7 +37,7 @@
                         <td><c:out value="${student.getId()}"/></td>
                         <td><c:out value="${student.getFullName()}"/></td>
                         <td><c:out value="${student.getCreatedAt()}"/></td>
-                        <td><c:out value="${student.getGroupID()}"/></td>
+                        <td><c:out value="${student.getGroup().getId()}"/></td>
                         <td><c:out value="${student.getAge()}"/></td>
                         <td>
                             <a href="/student/update/${student.getId()}" class="btn btn-warning">Update</a> ||

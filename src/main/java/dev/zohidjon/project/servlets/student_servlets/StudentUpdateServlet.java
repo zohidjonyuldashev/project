@@ -1,10 +1,10 @@
 package dev.zohidjon.project.servlets.student_servlets;
 
+import dev.zohidjon.project.models.Groups;
 import dev.zohidjon.project.models.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,14 +24,12 @@ public class StudentUpdateServlet extends HttpServlet {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            Student student = entityManager.find(Student.class, id);
+            Student student = entityManager.find(Student.class, Integer.parseInt(id));
             if (student != null) {
                 request.setAttribute("student", student);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/views/student/update.jsp");
-                dispatcher.forward(request, response);
+                request.getRequestDispatcher("/views/student/update.jsp").forward(request, response);
             }
             entityManager.getTransaction().commit();
-
         } catch (Exception e) {
             if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
@@ -47,26 +45,28 @@ public class StudentUpdateServlet extends HttpServlet {
         String pathInfo = request.getPathInfo();
         String id = pathInfo.substring(1);
         String fullName = request.getParameter("fullName");
-        int groupID = Integer.parseInt(request.getParameter("groupID"));
+        int groupId = Integer.parseInt(request.getParameter("groupId"));
         int age = Integer.parseInt(request.getParameter("age"));
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        EntityManager em = entityManagerFactory.createEntityManager();
         try {
-            entityManager.getTransaction().begin();
-            Student student = entityManager.find(Student.class, id);
+            em.getTransaction().begin();
+            Student student = em.find(Student.class, Integer.parseInt(id));
             if (student != null) {
                 student.setFullName(fullName);
-                student.setGroupID(groupID);
+                Groups group = em.find(Groups.class, groupId);
+                student.setGroup(group);
                 student.setAge(age);
             }
-            entityManager.getTransaction().commit();
+            em.getTransaction().commit();
             response.sendRedirect("/student");
         } catch (Exception e) {
-            if (entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
             }
             throw new ServletException(e);
         } finally {
-            entityManager.close();
+            em.close();
         }
     }
 }

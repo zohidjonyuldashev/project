@@ -13,8 +13,8 @@
             <input type="text" class="form-control" id="fullName" name="fullName">
         </div>
         <div class="mb-3">
-            <label for="groupID" class="form-label">Group id</label>
-            <input type="number" class="form-control" id="groupID" name="groupID">
+            <label for="groupId" class="form-label">Group id</label>
+            <input type="number" class="form-control" id="groupId" name="groupId">
         </div>
         <div class="mb-3">
             <label for="age" class="form-label">Age</label>

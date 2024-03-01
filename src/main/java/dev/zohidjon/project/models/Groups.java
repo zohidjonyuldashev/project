@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,5 +23,10 @@ public class Groups {
     @CreationTimestamp
     @Column(insertable = true, updatable = false, columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime createdAt;
+
+    @Column(columnDefinition = "int default 0")
     private int studentCount;
+
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    private List<Student> students;
 }

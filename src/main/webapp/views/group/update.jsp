@@ -12,11 +12,6 @@
             <label for="name" class="form-label">Group Name</label>
             <input type="text" class="form-control" id="name" name="name" value="${group.getName()}">
         </div>
-        <div class="mb-3">
-            <label for="studentCount" class="form-label">Student Count</label>
-            <input type="number" class="form-control" id="studentCount" name="studentCount"
-                   value="${group.getStudentCount()}">
-        </div>
         <a href="/" class="btn btn-warning">Back</a>
         <button type="submit" class="btn btn-success">Update</button>
     </form>

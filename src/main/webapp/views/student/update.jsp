@@ -13,8 +13,8 @@
             <input type="text" class="form-control" id="fullName" name="fullName" value="${student.getFullName()}">
         </div>
         <div class="mb-3">
-            <label for="groupID" class="form-label">Group ID</label>
-            <input type="number" class="form-control" id="groupID" name="groupID" value="${student.getGroupID()}">
+            <label for="groupId" class="form-label">Group ID</label>
+            <input type="number" class="form-control" id="groupId" name="groupId" value="${student.getGroup().getId()}">
         </div>
         <div class="mb-3">
             <label for="age" class="form-label">Age</label>

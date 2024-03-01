@@ -15,53 +15,53 @@ import java.io.IOException;
 
 @WebServlet(name = "GroupDeleteServlet", urlPatterns = "/group/delete/*")
 public class GroupDeleteServlet extends HttpServlet {
-    private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("orm_project");
 
-    @Override
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("orm_project");
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
         String id = pathInfo.substring(1);
 
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
-            entityManager.getTransaction().begin();
-            Groups groups = entityManager.find(Groups.class, id);
-            if (groups != null) {
-                request.setAttribute("group", groups);
+            em.getTransaction().begin();
+            Groups group = em.find(Groups.class, Integer.parseInt(id));
+            if (group != null) {
+                request.setAttribute("group", group);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/views/group/delete.jsp");
                 dispatcher.forward(request, response);
             }
-            entityManager.getTransaction().commit();
+            em.getTransaction().commit();
         } catch (Exception e) {
-            if (entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
             }
             throw new ServletException(e);
         } finally {
-            entityManager.close();
+            em.close();
         }
     }
 
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
         String id = pathInfo.substring(1);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        EntityManager em = emf.createEntityManager();
         try {
-            entityManager.getTransaction().begin();
-            Groups groups = entityManager.find(Groups.class, id);
-            if (groups != null) {
-                entityManager.remove(groups);
+            em.getTransaction().begin();
+            Groups group = em.find(Groups.class, Integer.parseInt(id));
+            if (group != null) {
+                em.remove(group);
             }
-            entityManager.getTransaction().commit();
+            em.getTransaction().commit();
             response.sendRedirect("/");
         } catch (Exception e) {
-            if (entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
             }
             throw new ServletException(e);
         } finally {
-            entityManager.close();
+            em.close();
         }
     }
 }

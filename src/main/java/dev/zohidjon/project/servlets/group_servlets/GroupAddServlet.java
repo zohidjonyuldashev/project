@@ -15,26 +15,21 @@ import java.io.IOException;
 
 @WebServlet(name = "GroupAddServlet", value = "/group/add")
 public class GroupAddServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/views/group/create.jsp");
-        dispatcher.forward(request, response);
-    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("name");
-        int studentCount = Integer.parseInt(request.getParameter("studentCount"));
-        Groups groups = Groups.builder()
-                .name(name)
-                .studentCount(studentCount)
-                .build();
+
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("orm_project");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            entityManager.persist(groups);
+            Groups group = Groups.builder()
+                    .name(name)
+                    .build();
+            entityManager.persist(group);
             entityManager.getTransaction().commit();
+
             response.sendRedirect("/");
         } catch (Exception e) {
             if (entityManager.getTransaction().isActive()) {
@@ -45,4 +40,11 @@ public class GroupAddServlet extends HttpServlet {
             entityManager.close();
         }
     }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/views/group/create.jsp");
+        dispatcher.forward(req, resp);
+    }
 }
+

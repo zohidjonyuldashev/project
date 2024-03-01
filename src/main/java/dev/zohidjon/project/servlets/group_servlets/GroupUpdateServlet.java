@@ -4,7 +4,6 @@ import dev.zohidjon.project.models.Groups;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,11 +23,10 @@ public class GroupUpdateServlet extends HttpServlet {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            Groups groups = entityManager.find(Groups.class, id);
+            Groups groups = entityManager.find(Groups.class, Integer.parseInt(id));
             if (groups != null) {
                 request.setAttribute("group", groups);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/views/group/update.jsp");
-                dispatcher.forward(request, response);
+                request.getRequestDispatcher("/views/group/update.jsp").forward(request, response);
             }
             entityManager.getTransaction().commit();
         } catch (Exception e) {
@@ -46,15 +44,13 @@ public class GroupUpdateServlet extends HttpServlet {
         String pathInfo = request.getPathInfo();
         String id = pathInfo.substring(1);
         String name = request.getParameter("name");
-        int studentCount = Integer.parseInt(request.getParameter("studentCount"));
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            Groups groups = entityManager.find(Groups.class, id);
+            Groups groups = entityManager.find(Groups.class, Integer.parseInt(id));
             if (groups != null) {
                 groups.setName(name);
-                groups.setStudentCount(studentCount);
             }
             entityManager.getTransaction().commit();
             response.sendRedirect("/");
