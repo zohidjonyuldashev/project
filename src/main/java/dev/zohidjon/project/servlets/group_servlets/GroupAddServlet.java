@@ -10,8 +10,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 
 import java.io.IOException;
+import java.util.Set;
 
 @WebServlet(name = "GroupAddServlet", value = "/group/add")
 public class GroupAddServlet extends HttpServlet {
@@ -20,13 +24,23 @@ public class GroupAddServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("name");
 
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        Groups group = Groups.builder()
+                .name(name)
+                .build();
+        Set<ConstraintViolation<Groups>> violations = validator.validate(group);
+
+        if (!violations.isEmpty()) {
+            StringBuilder errorMessage = new StringBuilder();
+            for (ConstraintViolation<Groups> violation : violations) {
+                errorMessage.append(violation.getMessage()).append("\n");
+            }
+            throw new ServletException(errorMessage.toString());
+        }
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("orm_project");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            Groups group = Groups.builder()
-                    .name(name)
-                    .build();
             entityManager.persist(group);
             entityManager.getTransaction().commit();
 

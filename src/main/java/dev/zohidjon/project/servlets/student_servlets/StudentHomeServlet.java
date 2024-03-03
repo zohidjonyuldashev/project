@@ -10,9 +10,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @WebServlet(name = "StudentHomeServlet", value = "/student")
 public class StudentHomeServlet extends HttpServlet {
@@ -20,11 +24,21 @@ public class StudentHomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("orm_project");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         try {
             entityManager.getTransaction().begin();
             TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s order by s.id", Student.class);
             List<Student> students = query.getResultList();
             entityManager.getTransaction().commit();
+
+            Set<ConstraintViolation<List<Student>>> violations = validator.validate(students);
+            if (!violations.isEmpty()) {
+                StringBuilder errorMessage = new StringBuilder();
+                for (ConstraintViolation<List<Student>> violation : violations) {
+                    errorMessage.append(violation.getMessage()).append("\n");
+                }
+                throw new ServletException(errorMessage.toString());
+            }
 
             request.setAttribute("students", students);
             request.getRequestDispatcher("/views/student/home.jsp").forward(request, response);

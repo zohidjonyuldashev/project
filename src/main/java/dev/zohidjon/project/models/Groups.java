@@ -1,6 +1,7 @@
 package dev.zohidjon.project.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class Groups {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotBlank(message = "Name is required")
     private String name;
     @CreationTimestamp
     @Column(insertable = true, updatable = false, columnDefinition = "timestamp default current_timestamp")
