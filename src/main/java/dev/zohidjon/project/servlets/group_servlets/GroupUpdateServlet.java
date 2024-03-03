@@ -1,6 +1,6 @@
 package dev.zohidjon.project.servlets.group_servlets;
 
-import dev.zohidjon.project.models.Groups;
+import dev.zohidjon.project.models.Group;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -21,7 +21,7 @@ public class GroupUpdateServlet extends HttpServlet {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            Groups groups = entityManager.find(Groups.class, Integer.parseInt(id));
+            Group groups = entityManager.find(Group.class, Integer.parseInt(id));
             if (groups != null) {
                 request.setAttribute("group", groups);
                 request.getRequestDispatcher("/views/group/update.jsp").forward(request, response);
@@ -46,7 +46,7 @@ public class GroupUpdateServlet extends HttpServlet {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            Groups groups = entityManager.find(Groups.class, Integer.parseInt(id));
+            Group groups = entityManager.find(Group.class, Integer.parseInt(id));
             if (groups != null) {
                 groups.setName(name);
             }

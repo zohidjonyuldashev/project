@@ -1,6 +1,6 @@
 package dev.zohidjon.project.servlets.group_servlets;
 
-import dev.zohidjon.project.models.Groups;
+import dev.zohidjon.project.models.Group;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -23,7 +23,7 @@ public class GroupDeleteServlet extends HttpServlet {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            Groups group = em.find(Groups.class, Integer.parseInt(id));
+            Group group = em.find(Group.class, Integer.parseInt(id));
             if (group != null) {
                 request.setAttribute("group", group);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/views/group/delete.jsp");
@@ -47,7 +47,7 @@ public class GroupDeleteServlet extends HttpServlet {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            Groups group = em.find(Groups.class, Integer.parseInt(id));
+            Group group = em.find(Group.class, Integer.parseInt(id));
             if (group != null) {
                 em.remove(group);
             }

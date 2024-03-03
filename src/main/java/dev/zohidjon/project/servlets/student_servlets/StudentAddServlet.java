@@ -1,6 +1,6 @@
 package dev.zohidjon.project.servlets.student_servlets;
 
-import dev.zohidjon.project.models.Groups;
+import dev.zohidjon.project.models.Group;
 import dev.zohidjon.project.models.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -46,7 +46,7 @@ public class StudentAddServlet extends HttpServlet {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            Groups group = entityManager.find(Groups.class, groupId);
+            Group group = entityManager.find(Group.class, groupId);
             if (group != null) {
                 Student studentEntity = Student.builder()
                         .fullName(fullName)

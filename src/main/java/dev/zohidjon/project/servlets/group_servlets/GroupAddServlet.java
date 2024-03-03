@@ -1,6 +1,6 @@
 package dev.zohidjon.project.servlets.group_servlets;
 
-import dev.zohidjon.project.models.Groups;
+import dev.zohidjon.project.models.Group;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -25,14 +25,14 @@ public class GroupAddServlet extends HttpServlet {
         String name = request.getParameter("name");
 
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Groups group = Groups.builder()
+        Group group = Group.builder()
                 .name(name)
                 .build();
-        Set<ConstraintViolation<Groups>> violations = validator.validate(group);
+        Set<ConstraintViolation<Group>> violations = validator.validate(group);
 
         if (!violations.isEmpty()) {
             StringBuilder errorMessage = new StringBuilder();
-            for (ConstraintViolation<Groups> violation : violations) {
+            for (ConstraintViolation<Group> violation : violations) {
                 errorMessage.append(violation.getMessage()).append("\n");
             }
             throw new ServletException(errorMessage.toString());

@@ -1,6 +1,6 @@
 package dev.zohidjon.project.servlets.student_servlets;
 
-import dev.zohidjon.project.models.Groups;
+import dev.zohidjon.project.models.Group;
 import dev.zohidjon.project.models.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -50,7 +50,7 @@ public class StudentDeleteServlet extends HttpServlet {
             entityManager.getTransaction().begin();
             Student student = entityManager.find(Student.class, Integer.parseInt(id));
             if (student != null) {
-                Groups group = student.getGroup();
+                Group group = student.getGroup();
                 entityManager.remove(student);
 
                 long studentCount = (long) entityManager.createQuery("SELECT COUNT(s) FROM Student s WHERE s.group.id = :groupId")

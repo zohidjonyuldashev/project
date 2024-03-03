@@ -1,6 +1,6 @@
 package dev.zohidjon.project.servlets.group_servlets;
 
-import dev.zohidjon.project.models.Groups;
+import dev.zohidjon.project.models.Group;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -26,14 +26,14 @@ public class GroupHomeServlet extends HttpServlet {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            TypedQuery<Groups> query = entityManager.createQuery("SELECT g FROM Groups g order by g.id", Groups.class);
-            List<Groups> groups = query.getResultList();
+            TypedQuery<Group> query = entityManager.createQuery("SELECT g FROM Group g order by g.id", Group.class);
+            List<Group> groups = query.getResultList();
             entityManager.getTransaction().commit();
 
             ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
             Validator validator = validatorFactory.getValidator();
-            for (Groups group : groups) {
-                Set<ConstraintViolation<Groups>> violations = validator.validate(group);
+            for (Group group : groups) {
+                Set<ConstraintViolation<Group>> violations = validator.validate(group);
                 if (!violations.isEmpty()) {
                     throw new ServletException("Validation error occurred for group: " + group.getId());
                 }

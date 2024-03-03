@@ -1,6 +1,6 @@
 package dev.zohidjon.project.servlets.student_servlets;
 
-import dev.zohidjon.project.models.Groups;
+import dev.zohidjon.project.models.Group;
 import dev.zohidjon.project.models.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -52,7 +52,7 @@ public class StudentUpdateServlet extends HttpServlet {
             Student student = em.find(Student.class, Integer.parseInt(id));
             if (student != null) {
                 student.setFullName(fullName);
-                Groups group = em.find(Groups.class, groupId);
+                Group group = em.find(Group.class, groupId);
                 student.setGroup(group);
                 student.setAge(age);
             }

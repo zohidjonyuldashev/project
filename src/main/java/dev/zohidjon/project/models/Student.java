@@ -30,5 +30,5 @@ public class Student {
 
     @ManyToOne
     @JoinColumn(name = "groupId")
-    private Groups group;
+    private Group group;
 }
