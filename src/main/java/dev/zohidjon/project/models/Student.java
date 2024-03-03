@@ -23,7 +23,7 @@ public class Student {
     @NotBlank(message = "Full name is required")
     private String fullName;
     @CreationTimestamp
-    @Column(insertable = true, updatable = false, columnDefinition = "timestamp default current_timestamp")
+    @Column(updatable = false, columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime createdAt;
     @Positive(message = "Age must be a positive number")
     private int age;

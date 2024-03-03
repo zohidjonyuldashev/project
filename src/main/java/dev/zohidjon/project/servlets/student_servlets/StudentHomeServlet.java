@@ -14,14 +14,13 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
 @WebServlet(name = "StudentHomeServlet", value = "/student")
 public class StudentHomeServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("orm_project");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -53,6 +52,6 @@ public class StudentHomeServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
     }
 }

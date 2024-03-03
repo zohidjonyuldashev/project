@@ -22,7 +22,7 @@ import java.util.Set;
 public class StudentAddServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         String fullName = request.getParameter("fullName");
         String groupId = request.getParameter("groupId");
         int age = Integer.parseInt(request.getParameter("age"));

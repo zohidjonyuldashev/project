@@ -21,7 +21,7 @@ import java.util.Set;
 public class GroupAddServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         String name = request.getParameter("name");
 
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();

@@ -23,7 +23,7 @@ public class Groups {
     @NotBlank(message = "Name is required")
     private String name;
     @CreationTimestamp
-    @Column(insertable = true, updatable = false, columnDefinition = "timestamp default current_timestamp")
+    @Column(updatable = false, columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime createdAt;
 
     @Column(columnDefinition = "int default 0")

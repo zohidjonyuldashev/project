@@ -11,14 +11,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
-
 @WebServlet(name = "StudentUpdateServlet", urlPatterns = "/student/update/*")
 public class StudentUpdateServlet extends HttpServlet {
     private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("orm_project");
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         String pathInfo = request.getPathInfo();
         String id = pathInfo.substring(1);
         EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -41,7 +39,7 @@ public class StudentUpdateServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         String pathInfo = request.getPathInfo();
         String id = pathInfo.substring(1);
         String fullName = request.getParameter("fullName");
