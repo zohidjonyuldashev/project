@@ -20,6 +20,7 @@
             <label for="age" class="form-label">Age</label>
             <input type="number" class="form-control" id="age" name="age">
         </div>
+        <a href="/student" class="btn btn-warning">Back</a>
         <button type="submit" class="btn btn-success">Save</button>
     </form>
 </div>

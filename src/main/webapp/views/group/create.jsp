@@ -12,6 +12,7 @@
             <label for="name" class="form-label">Name</label>
             <input type="text" class="form-control" id="name" name="name">
         </div>
+        <a href="/" class="btn btn-warning">Back</a>
         <button type="submit" class="btn btn-success">Save</button>
     </form>
 </div>
